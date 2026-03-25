@@ -26,7 +26,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aulaandroid.quizgameaplication.quiz.QuizViewModel
+import com.aulaandroid.quizgameaplication.screens.ModeloPerguntas
 import com.aulaandroid.quizgameaplication.screens.TelaInicialScreen
+import com.aulaandroid.quizgameaplication.screens.TelaResultadoScreen
 import com.aulaandroid.quizgameaplication.ui.theme.QuizGameAplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
             QuizGameAplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                    val navController = rememberNavController()
+                    val viewModelCompartilhado : QuizViewModel = viewModel()
 
                     NavHost(
                         navController = navController,
@@ -64,8 +67,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }){
 
-                            val viewModel: QuizViewModel = viewModel()
-                            val nome by viewModel.nomeJogador.collectAsState()
+                            val nome by viewModelCompartilhado.nomeJogador.collectAsState()
 
                             TelaInicialScreen(
                                 navController = navController,
@@ -73,9 +75,8 @@ class MainActivity : ComponentActivity() {
                                 placeholder = "Digites o seu nome completo",
                                 keyboardType = KeyboardType.Text,
                                 value = nome,
-
                                 atualizarValor = { novoTexto ->
-                                  viewModel.atualizarNome(novoTexto)
+                                    viewModelCompartilhado.atualizarNome(novoTexto)
                                 }
                             )
                         }
@@ -88,7 +89,24 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         ){
-                            
+                            ModeloPerguntas(
+                                viewModel = viewModelCompartilhado,
+                                navController = navController
+                            )
+                        }
+                        composable(
+                            route = "Tela-Resultado",
+                            exitTransition = {
+                                slideOutOfContainer(
+                                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                                    animationSpec = tween (2000)
+                                )
+                            }
+                        ){
+                            TelaResultadoScreen(
+                                viewModel = viewModelCompartilhado,
+                                navController = navController
+                            )
                         }
                     }
                 }

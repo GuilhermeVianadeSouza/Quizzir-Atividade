@@ -1,9 +1,9 @@
-//package com.aulaandroid.quizgameaplication.quiz
-//
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Modifier
-//
-//@Composable
-//fun Perguntas(modifier: Modifier = Modifier) {
-//
-//}
+package com.aulaandroid.quizgameaplication.quiz
+
+data class Perguntas(
+    val textoDaPergunta: String,
+    val alternativas: List<String>,
+    val indiceRespostaCorreta: Int
+) {
+
+}
